@@ -17,5 +17,13 @@ client.on('message', (channel, tags, message, self) => {
 	if(message.toLowerCase() === '!hello') {
 		client.say(channel, `@${tags.username}, heya!`);
 	}
-	console.log(message);
+	if(message.toLowerCase() === '!commandos') {
+		client.say(channel, `@${tags.username} Ha solicitado los comandos!`);
+	}
+	console.log(tags);
+});
+client.on("join", (channel, username, self) => {
+	if(self) return;
+	client.say(channel, `@${username} Bienvenido a bordo!`);
+	console.log(username + ' has joined to ' + channel);
 });
