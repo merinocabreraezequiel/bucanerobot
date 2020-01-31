@@ -4,18 +4,19 @@ const ConnectionData = {
 	reconnect:true,
 	secure:true,
 	username:'bucanerobot',
-	oauth:'oauth:1q3yxwbujlmndf0e108yoqivdfmxef',
-	channels: [ '#ferreiraTV' ]
+	oauth:'oauth:generatedCode',
+	channels: [ '#TwitchChannel' ]
 };
 const ChatUser = {
 	username: "",
 	lastJoinDate: "",
-	greetedTimes: 0,
-	printIntroduction: function () {
-	  console.log(`My name is ${this.name}. Am I human? ${this.isHuman}`);
+	greetedDays: 0,
+	todayGreeted: false,
+	justfunctionSheet: function () {
+	  console.log(`username ${this.username}. lastjoinDate ${this.lastJoinDate}`);
 	}
   };
-let UserArray = [];
+let UsersArray = [];
 const client = new tmi.Client({
 	options: { debug: ConnectionData.debug },
 	connection: {
@@ -23,32 +24,58 @@ const client = new tmi.Client({
 		secure: ConnectionData.secure
 	},
 	identity: {
-		username:ConnectionData.username,
-		password:ConnectionData.oauth
+		username: ConnectionData.username,
+		password: ConnectionData.oauth
 	},
-	channels:ConnectionData.channels
+	channels: ConnectionData.channels
 });
 client.connect();
 client.on('message', (channel, tags, message, self) => {
 	if(self) return;
-	if(message.toLowerCase() === '!hello') {
-		client.say(channel, `@${tags.username}, heya!`);
-	}
-	if(message.toLowerCase() === '!commandos') {
-		client.say(channel, `@${tags.username} Ha solicitado los comandos!`);
+	switch(message.toLowerCase()){
+		case '!hello':
+			client.say(channel, `@${tags.username}, heya!`);
+		break;
+		case '!commandos':
+			client.say(channel, `@${tags.username} Ha solicitado los comandos!`);
+		break;
+		default:
+			console.log('no action wit this messaje');
 	}
 	console.log(tags);
 });
 client.on("join", (channel, username, self) => {
 	if(self) return;
 	let cu = Object.create(ChatUser);
-	cu.username = username;
-	cu.lastJoinDate =  currentDateFormated();
-	cu.greetedTimes = cu.greetedTimes + 1;
-	UserArray.push(cu);
-	client.say(channel, `@${username} Bienvenido a bordo!`);
+	let registered = false;
+	UsersArray.forEach(function (element, index, array) {
+		if (element.username === username){
+			registered=true;
+			if (element.lastJoinDate !== currentDateFormated()){
+				element.lastJoinDate = currentDateFormated();
+				++element.greetedDays;
+				element.todayGreeted = false;
+			} else {
+				element.todayGreeted = true;
+			}
+			cu = element;
+		}
+		console.log(index, element.username, element.greetedDays);
+	});
+	if (!registered){
+		cu.username = username;
+		cu.lastJoinDate =  currentDateFormated();
+		cu.greetedDays = 1;
+		cu.todayGreeted = false;
+		UsersArray.push(cu);
+	}
+	if(cu.todayGreeted){
+		client.say(channel, `Bienvenido de vuelta @${username} `);
+	} else {
+		client.say(channel, `Bienvenido a bordo @${username}`);
+	}
 	console.log(username + ' has joined to ' + channel);
-	console.log(UserArray[0].username + ' ' + UserArray[0].lastJoinDate);
+	console.log(cu.username + ' ' + cu.lastJoinDate);
 });
 
 /* INTERNAL FUNCTIONS */
@@ -57,11 +84,9 @@ function currentDateFormated() {
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
-
     if (month.length < 2) 
         month = '0' + month;
     if (day.length < 2) 
         day = '0' + day;
-
     return [year, month, day].join('-');
 }
