@@ -1,4 +1,12 @@
 const tmi = require('tmi.js');
+const ConnectionData = {
+	debug:true,
+	reconnect:true,
+	secure:true,
+	username:'bucanerobot',
+	oauth:'oauth:1q3yxwbujlmndf0e108yoqivdfmxef',
+	channels: [ '#ferreiraTV' ]
+};
 const ChatUser = {
 	username: "",
 	lastJoinDate: "",
@@ -9,16 +17,16 @@ const ChatUser = {
   };
 let UserArray = [];
 const client = new tmi.Client({
-	options: { debug: true },
+	options: { debug: ConnectionData.debug },
 	connection: {
-		reconnect: true,
-		secure: true
+		reconnect: ConnectionData.reconnect,
+		secure: ConnectionData.secure
 	},
 	identity: {
-		username: 'bucanerobot',
-		password: 'oauth:generatedCode'
+		username:ConnectionData.username,
+		password:ConnectionData.oauth
 	},
-	channels: [ '#TwitchChannel' ]
+	channels:ConnectionData.channels
 });
 client.connect();
 client.on('message', (channel, tags, message, self) => {
