@@ -40,6 +40,11 @@ client.on('message', (channel, tags, message, self) => {
 			console.log('no action wit this messaje');
 	}
 	console.log(tags);
+	let data = JSON.stringify(tags, null, 2);
+	fs.appendFile('tagsLog.json', data, (err) => {
+		if (err) throw err;
+		console.log('Data written to file');
+	});
 });
 client.on("join", (channel, username, self) => {
 	if(self) return;
@@ -64,6 +69,14 @@ client.on("join", (channel, username, self) => {
 		cu.lastJoinDate =  currentDateFormated();
 		cu.greetedDays = 1;
 		cu.todayGreeted = false;
+		let jsonvar = {
+			username : cu.username,
+			lastJoinDate : cu.lastJoinDate,
+			greetedDays : 1,
+			todayGreeted : false
+		}	
+		let data = JSON.stringify(jsonvar, null, 2);
+		fs.appendFileSync('usersregistry.json', data);
 		UsersArray.push(cu);
 	}
 	if(cu.todayGreeted){

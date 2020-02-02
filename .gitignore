@@ -2,3 +2,5 @@ node_modules/
 oauth.md
 package-lock.json
 config.json
+tagsLog.json
+userregistry.json
