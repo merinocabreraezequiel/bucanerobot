@@ -11,6 +11,8 @@ nodejs twitch bot to get overlay notifications on OBS
 
 > Install dependencies
 
+> change 'config.json.default' file to 'config.json' and fill with your information
+
 ## Build with 🛠️
 
 * [NodeJS](https://www.nodejs.org) - Works in all OS compatible
