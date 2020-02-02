@@ -8,6 +8,7 @@ nodejs twitch bot to get overlay notifications on OBS
 
 ### Installation 🔧
 > Clon repository
+
 > Install dependencies
 
 ## Build with 🛠️

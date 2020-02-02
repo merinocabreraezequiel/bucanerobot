@@ -1,12 +1,9 @@
 const tmi = require('tmi.js');
-const ConnectionData = {
-	debug:true,
-	reconnect:true,
-	secure:true,
-	username:'bucanerobot',
-	oauth:'oauth:generatedCode',
-	channels: [ '#TwitchChannel' ]
-};
+const fs = require('fs');
+
+let rawdata = fs.readFileSync('config.json');
+let ConnectionData = JSON.parse(rawdata);
+
 const ChatUser = {
 	username: "",
 	lastJoinDate: "",

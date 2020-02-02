@@ -1,0 +1,8 @@
+{
+	"debug":true,
+	"reconnect":true,
+	"secure":true,
+	"username":"bucanerobot",
+	"oauth":"oauth:generatedCode",
+	"channels": [ "#TwitchChannel" ]
+}
