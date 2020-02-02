@@ -3,6 +3,7 @@ nodejs twitch bot to get overlay notifications on OBS
 
 ### Pre-requirements 📋
 > nodeJS 12.14.1 LTS [Download](https://nodejs.org/es/download/)
+
 > oauth Twitch [GET IT](Get your OAuth Password - http://twitchapps.com/tmi/)
 
 ### Installation 🔧
