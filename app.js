@@ -1,5 +1,7 @@
+/** IMPORTING AND NEEDED VARS INITALIZATION*/
 const tmi = require('tmi.js');
 const fs = require('fs');
+var TwitchAPI = require('twitch-api-v5'); 
 
 let rawdata = fs.readFileSync('config.json');
 let ConnectionData = JSON.parse(rawdata);
@@ -14,6 +16,11 @@ const ChatUser = {
 	}
   };
 let UsersArray = [];
+
+/** TWITCH API APP CLIEND ID DEFINITION */
+TwitchAPI.clientID = ConnectionData.AppClientID;
+
+/** TMI CREATING CONNECTION */
 const client = new tmi.Client({
 	options: { debug: ConnectionData.debug },
 	connection: {
@@ -27,6 +34,25 @@ const client = new tmi.Client({
 	channels: ConnectionData.channels
 });
 client.connect();
+
+/** TWITCH API FUNCTIONS */
+getChattersTwitchAPI();
+
+setInterval(function(){
+    getChattersTwitchAPI()
+}, 30000)
+
+function getChattersTwitchAPI(){
+	TwitchAPI.other.chatters({ channelName: ConnectionData.channel }, (err, res) => {
+    	if(err) {
+   	     console.log(err);
+    	} else {
+    	    console.log(res);
+    	}
+	});
+}
+
+/** TMI ON EVENTS */
 client.on('message', (channel, tags, message, self) => {
 	if(self) return;
 	switch(message.toLowerCase()){
@@ -40,6 +66,7 @@ client.on('message', (channel, tags, message, self) => {
 			console.log('no action wit this messaje');
 	}
 	console.log(tags);
+	console.log(channel);
 	let data = JSON.stringify(tags, null, 2);
 	fs.appendFile('tagsLog.json', data, (err) => {
 		if (err) throw err;
@@ -85,7 +112,7 @@ client.on("join", (channel, username, self) => {
 		client.say(channel, `Bienvenido a bordo @${username}`);
 	}
 	console.log(username + ' has joined to ' + channel);
-	console.log(cu.username + ' ' + cu.lastJoinDate);
+	//console.log(cu.username + ' ' + cu.lastJoinDate);
 });
 
 /* INTERNAL FUNCTIONS */

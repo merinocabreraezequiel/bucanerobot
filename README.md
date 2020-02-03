@@ -1,17 +1,23 @@
 # bucanerobot
 nodejs twitch bot to get overlay notifications on OBS
+Gonna use the TMI.JS to chat and the TWITCH API throw the twitch-api-v5.
 
 ### Pre-requirements 📋
 > nodeJS 12.14.1 LTS [Download](https://nodejs.org/es/download/)
 
 > oauth Twitch [GET IT](http://twitchapps.com/tmi/)
 
+> Register your App on Twitch [GET APP CLIENT ID](https://dev.twitch.tv/console/apps/)
+
 ### Installation 🔧
 > Clon repository
 
 > Install dependencies
+>> npm i tmi.js --save
+>> npm i fs -g
+>> npm i twitch-api-v5 --save
 
-> change 'config.json.default' file to 'config.json' and fill with your information
+> change 'config.json.sample' file to 'config.json' and fill with your information
 
 > run 'npm start' or 'node app.js'
 
@@ -19,6 +25,7 @@ nodejs twitch bot to get overlay notifications on OBS
 
 * [NodeJS](https://www.nodejs.org) - Works in all OS compatible
 * [tmi.js](http://www.tmijs.com) - Twitch bot JS solution
+* [twitch-api-v5](https://www.npmjs.com/package/twitch-api-v5) - Twitch API for JS
 
 ## Authors ✒️
 
@@ -30,5 +37,5 @@ This project is undel license (GPL3) - Read about on the file [LICENSE](LICENSE)
 
 ## Thanks to 🎁
 
-* Capitan FerreiraTV who ask about the possibility to create this solution [FerreiraTV TWITCH](https://www.twitch.tv/ferreiratv)
+* Capitan FerreiraTV who ask about the possibility to create this solution [FerreiraTV TWITCH Channel](https://www.twitch.tv/ferreiratv)
 

@@ -4,5 +4,7 @@
 	"secure":true,
 	"username":"bucanerobot",
 	"oauth":"oauth:generatedCode",
-	"channels": [ "#TwitchChannel" ]
+	"channels": [ "#TwitchChannel" ],
+	"channel": "TwitchChannel",
+	"AppClientID":"Twitch_APP_CLIENT_ID"
 }
