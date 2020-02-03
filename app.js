@@ -85,7 +85,14 @@ client.on("join", (channel, username, self) => {
 		client.say(channel, `Bienvenido a bordo @${username}`);
 	}
 	console.log(username + ' has joined to ' + channel);
-	console.log(cu.username + ' ' + cu.lastJoinDate);
+	//console.log(cu.username + ' ' + cu.lastJoinDate);
+});
+
+client.on("action", (channel, userstate, message, self) => {
+    // Don't listen to my own messages..
+    if (self) return;
+	console.log('Action:' + userstate);
+    // Do your stuff.
 });
 
 /* INTERNAL FUNCTIONS */
