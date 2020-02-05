@@ -52,7 +52,11 @@ function getChattersTwitchAPI(chatChannel=ConnectionData.channel){
     	if(err) {
    	     console.log(err);
     	} else {
-    	    console.log(res);
+			res.chatters.viewers.forEach(function (element, index,){
+				checkUserRegister(element, chatChannel);
+				console.log(element+' '+chatChannel);
+			});
+			console.log(res);
     	}
 	});
 }
@@ -95,6 +99,34 @@ client.on('message', (channel, tags, message, self) => {
  */
 client.on("join", (channel, username, self) => {
 	if(self) return;
+	checkUserRegister(username, channel);
+	//console.log(cu.username + ' ' + cu.lastJoinDate);
+});
+
+/* INTERNAL FUNCTIONS */
+/**
+ * Format in DD-MM-YYYY current date
+ * @function
+ * @returns {string} DD-MM-YYYY
+ */
+function currentDateFormated() {
+	var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+    return [year, month, day].join('-');
+}
+/**
+ * check user name in database and to acctions like greet or add to registry
+ * @function
+ * @param {string} username - Name of the user in chat to check if exist or actions to do
+ * @param {string} channel - Name of the channel to send the answer if its need it
+ */
+function checkUserRegister(username, channel){
 	let cu = Object.create(ChatUser);
 	let registered = false;
 	UsersArray.forEach(function (element, index, array) {
@@ -102,7 +134,7 @@ client.on("join", (channel, username, self) => {
 			registered=true;
 			if (element.lastJoinDate !== currentDateFormated()){
 				element.lastJoinDate = currentDateFormated();
-				++element.greetedDays;
+				element.greetedDays = element.greetedDays + 1;
 				element.todayGreeted = false;
 			} else {
 				element.todayGreeted = true;
@@ -132,23 +164,4 @@ client.on("join", (channel, username, self) => {
 		client.say(channel, `Bienvenido a bordo @${username}`);
 	}
 	console.log(username + ' has joined to ' + channel);
-	//console.log(cu.username + ' ' + cu.lastJoinDate);
-});
-
-/* INTERNAL FUNCTIONS */
-/**
- * Format in DD-MM-YYYY current date
- * @constructor
- * @returns {string} DD-MM-YYYY
- */
-function currentDateFormated() {
-	var d = new Date(),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-    if (month.length < 2) 
-        month = '0' + month;
-    if (day.length < 2) 
-        day = '0' + day;
-    return [year, month, day].join('-');
 }
