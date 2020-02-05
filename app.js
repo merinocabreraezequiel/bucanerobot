@@ -176,25 +176,4 @@ function checkUserRegister(username, channel){
 		client.say(channel, `Bienvenido de vuelta @${username} `);
 	}
 	console.log(username + ' has joined to ' + channel);
-	//console.log(cu.username + ' ' + cu.lastJoinDate);
-});
-
-client.on("action", (channel, userstate, message, self) => {
-    // Don't listen to my own messages..
-    if (self) return;
-	console.log('Action:' + userstate);
-    // Do your stuff.
-});
-
-/* INTERNAL FUNCTIONS */
-function currentDateFormated() {
-	var d = new Date(),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-    if (month.length < 2) 
-        month = '0' + month;
-    if (day.length < 2) 
-        day = '0' + day;
-    return [year, month, day].join('-');
 }
