@@ -15,7 +15,10 @@ const ChatUser = {
 	  console.log(`username ${this.username}. lastjoinDate ${this.lastJoinDate}`);
 	}
   };
+
 let UsersArray = [];
+let GreetList = [];
+
 
 /* TWITCH API APP CLIEND ID DEFINITION */
 TwitchAPI.clientID = ConnectionData.AppClientID;
@@ -52,10 +55,19 @@ function getChattersTwitchAPI(chatChannel=ConnectionData.channel){
     	if(err) {
    	     console.log(err);
     	} else {
+			let GreetListTemp = [];
 			res.chatters.viewers.forEach(function (element, index,){
-				checkUserRegister(element, chatChannel);
+				if (!GreetList.includes(element)){
+					GreetList.push(element);
+					checkUserRegister(element, chatChannel);
+				} else {
+					console.log(element+' ya en la lista');
+				}
+				GreetListTemp.push(element);
 				console.log(element+' '+chatChannel);
 			});
+			GreetList = GreetListTemp;
+			console.log(GreetList);
 			console.log(res);
     	}
 	});
@@ -158,10 +170,10 @@ function checkUserRegister(username, channel){
 		fs.appendFileSync('usersregistry.json', data);
 		UsersArray.push(cu);
 	}
-	if(cu.todayGreeted){
-		client.say(channel, `Bienvenido de vuelta @${username} `);
-	} else {
+	if (!cu.todayGreeted){
 		client.say(channel, `Bienvenido a bordo @${username}`);
+	} else {
+		client.say(channel, `Bienvenido de vuelta @${username} `);
 	}
 	console.log(username + ' has joined to ' + channel);
 }
