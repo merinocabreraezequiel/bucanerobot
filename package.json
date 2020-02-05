@@ -323,6 +323,8 @@
       "resolved": "https://registry.npmjs.org/tweetnacl/-/tweetnacl-0.14.5.tgz",
       "version": "0.14.5"
     },
+    "twitch-api-v5": "^2.0.4",
+    "twitch-js": "^2.0.0-beta.33",
     "uri-js": {
       "integrity": "sha512-KY9Frmirql91X2Qgjry0Wd4Y+YTdrdZheS8TFwvkbLWf/G5KNJDCh6pKL5OZctEW4+0Baa5idK2ZQuELRwPznQ==",
       "requires": {

@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "username": "emerinoc",
   "lastJoinDate": "2020-02-02",
   "greetedDays": 1,
@@ -16,10 +17,15 @@
 }{
   "username": "emerinoc",
   "lastJoinDate": "2020-02-02",
+=======
+  "username": "ferreiratv",
+  "lastJoinDate": "2020-02-03",
+>>>>>>> develop
   "greetedDays": 1,
   "todayGreeted": false
 }{
   "username": "ferreiratv",
+<<<<<<< HEAD
   "lastJoinDate": "2020-02-02",
   "greetedDays": 1,
   "todayGreeted": false
@@ -145,6 +151,53 @@
   "todayGreeted": false
 }{
   "username": "ferreiratv",
+=======
+  "lastJoinDate": "2020-02-03",
+  "greetedDays": 1,
+  "todayGreeted": false
+}{
+  "username": "ferreiratv",
+  "lastJoinDate": "2020-02-03",
+  "greetedDays": 1,
+  "todayGreeted": false
+}{
+  "username": "ferreiratv",
+  "lastJoinDate": "2020-02-03",
+  "greetedDays": 1,
+  "todayGreeted": false
+}{
+  "username": "ferreiratv",
+  "lastJoinDate": "2020-02-03",
+  "greetedDays": 1,
+  "todayGreeted": false
+}{
+  "username": "emerinoc",
+  "lastJoinDate": "2020-02-03",
+  "greetedDays": 1,
+  "todayGreeted": false
+}{
+  "username": "ferreiratv",
+  "lastJoinDate": "2020-02-03",
+  "greetedDays": 1,
+  "todayGreeted": false
+}{
+  "username": "emerinoc",
+  "lastJoinDate": "2020-02-03",
+  "greetedDays": 1,
+  "todayGreeted": false
+}{
+  "username": "ferreiratv",
+  "lastJoinDate": "2020-02-03",
+  "greetedDays": 1,
+  "todayGreeted": false
+}{
+  "username": "ferreiratv",
+  "lastJoinDate": "2020-02-03",
+  "greetedDays": 1,
+  "todayGreeted": false
+}{
+  "username": "emerinoc",
+>>>>>>> develop
   "lastJoinDate": "2020-02-03",
   "greetedDays": 1,
   "todayGreeted": false
