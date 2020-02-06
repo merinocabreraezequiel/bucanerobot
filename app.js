@@ -177,5 +177,5 @@ function checkUserRegister(username, channel){
  */
 function updateUsersJson(){
 	let data = JSON.stringify(UsersArray, null, 2);
-	fs.appendFileSync('usersregistry.json', data);
+	fs.writeFileSync('usersregistry.json', data);
 }
