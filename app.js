@@ -160,14 +160,6 @@ function checkUserRegister(username, channel){
 		cu.lastJoinDate =  currentDateFormated();
 		cu.greetedDays = 1;
 		cu.todayGreeted = false;
-		let jsonvar = {
-			username : cu.username,
-			lastJoinDate : cu.lastJoinDate,
-			greetedDays : 1,
-			todayGreeted : false
-		}	
-		let data = JSON.stringify(jsonvar, null, 2);
-		fs.appendFileSync('usersregistry.json', data);
 		UsersArray.push(cu);
 	}
 	if (!cu.todayGreeted){
@@ -175,5 +167,15 @@ function checkUserRegister(username, channel){
 	} else {
 		client.say(channel, `Bienvenido de vuelta @${username} `);
 	}
+	updateUsersJson();
 	console.log(username + ' has joined to ' + channel);
+}
+
+/**
+ * Save Array to json file with users statistics
+ * @function
+ */
+function updateUsersJson(){
+	let data = JSON.stringify(UsersArray, null, 2);
+	fs.appendFileSync('usersregistry.json', data);
 }
