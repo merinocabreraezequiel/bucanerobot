@@ -4,7 +4,7 @@ const fs = require('fs');
 var TwitchAPI = require('twitch-api-v5'); 
 
 let rawdata = fs.readFileSync('config.json');
-let ConnectionData = JSON.parse(rawdata);
+let ConfigData = JSON.parse(rawdata);
 
 const ChatUser = {
 	username: "",
@@ -26,20 +26,20 @@ UAObj.forEach(function (element, index,){
 });
 
 /* TWITCH API APP CLIEND ID DEFINITION */
-TwitchAPI.clientID = ConnectionData.AppClientID;
+TwitchAPI.clientID = ConfigData.AppClientID;
 
 /* TMI CREATING CONNECTION */
 const client = new tmi.Client({
-	options: { debug: ConnectionData.debug },
+	options: { debug: ConfigData.debug },
 	connection: {
-		reconnect: ConnectionData.reconnect,
-		secure: ConnectionData.secure
+		reconnect: ConfigData.reconnect,
+		secure: ConfigData.secure
 	},
 	identity: {
-		username: ConnectionData.username,
-		password: ConnectionData.oauth
+		username: ConfigData.username,
+		password: ConfigData.oauth
 	},
-	channels: ConnectionData.channels
+	channels: ConfigData.channels
 });
 client.connect();
 
@@ -55,7 +55,7 @@ setInterval(function(){
  * @constructor
  * @param {string} chatChannel name of the Twitch Channel
  */
-function getChattersTwitchAPI(chatChannel=ConnectionData.channel){
+function getChattersTwitchAPI(chatChannel=ConfigData.channel){
 	TwitchAPI.other.chatters({ channelName: chatChannel }, (err, res) => {
     	if(err) {
    	     console.log(err);
@@ -168,7 +168,11 @@ function checkUserRegister(username, channel){
 		UsersArray.push(cu);
 	}
 	if (!cu.todayGreeted){
-		client.say(channel, `Bienvenido a bordo @${username}`);
+		if (cu.greetedDays <= ConfigData.daysBeforeIgnore){
+			client.say(channel, `Bienvenido a bordo @${username}`);
+		} else {
+			client.say(channel, `@${username} ya te has pasado por aquí 5 días, date por saludado para siempre`);
+		}
 	} else {
 		client.say(channel, `Bienvenido de vuelta @${username} `);
 	}
