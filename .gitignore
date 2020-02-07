@@ -1,6 +1,4 @@
 node_modules/
 oauth.md
-package-lock.json
-config.json
-tagsLog.json
-usersregistry.json
+*.json
+!package.json
