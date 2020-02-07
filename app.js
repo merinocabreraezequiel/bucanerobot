@@ -19,6 +19,11 @@ const ChatUser = {
 let UsersArray = [];
 let GreetList = [];
 
+rawdata = fs.readFileSync('usersregistry.json');
+let UAObj = JSON.parse(rawdata);
+UAObj.forEach(function (element, index,){
+	UsersArray.push(element);
+});
 
 /* TWITCH API APP CLIEND ID DEFINITION */
 TwitchAPI.clientID = ConnectionData.AppClientID;
