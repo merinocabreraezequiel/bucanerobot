@@ -1,10 +1,11 @@
 {
-	"debug":true,
-	"reconnect":true,
-	"secure":true,
+	"debug":{boolean},
+	"reconnect":{boolean},
+	"secure":{boolean},
 	"username":"bucanerobot",
 	"oauth":"oauth:generatedCode",
 	"channels": [ "#TwitchChannel" ],
 	"channel": "TwitchChannel",
-	"AppClientID":"Twitch_APP_CLIENT_ID"
+	"AppClientID":"Twitch_APP_CLIENT_ID",
+	"daysBeforeIgnore":{number}
 }
