@@ -72,6 +72,26 @@ function getChattersTwitchAPI(chatChannel=ConfigData.channel){
 				GreetListTemp.push(element);
 				console.log(element+' '+chatChannel);
 			});
+			res.chatters.vips.forEach(function (element, index,){
+				if (!GreetList.includes(element)){
+					GreetList.push(element);
+					checkUserRegister(element, chatChannel);
+				} else {
+					console.log(element+' ya en la lista');
+				}
+				GreetListTemp.push(element);
+				console.log(element+' '+chatChannel);
+			});
+			res.chatters.moderators.forEach(function (element, index,){
+				if (!GreetList.includes(element)){
+					GreetList.push(element);
+					checkUserRegister(element, chatChannel);
+				} else {
+					console.log(element+' ya en la lista');
+				}
+				GreetListTemp.push(element);
+				console.log(element+' '+chatChannel);
+			});
 			GreetList = GreetListTemp;
 			console.log(GreetList);
 			console.log(res);

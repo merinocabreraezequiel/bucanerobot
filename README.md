@@ -1,9 +1,11 @@
 # bucanerobot
-nodejs twitch bot to get overlay notifications on OBS
+nodejs twitch bot to get overlay notifications on STREAMLABS
 Gonna use the TMI.JS to chat and the TWITCH API throw the twitch-api-v5.
 
 ### Pre-requirements 📋
 > nodeJS 12.14.1 LTS [Download](https://nodejs.org/es/download/)
+
+> Streamlabs OBS [Download](https://streamlabs.com/slobs/download)
 
 > oauth Twitch [GET IT](http://twitchapps.com/tmi/)
 
@@ -13,12 +15,9 @@ Gonna use the TMI.JS to chat and the TWITCH API throw the twitch-api-v5.
 > Clon repository
 
 > Install dependencies
->> npm i tmi.js --save
->> npm i fs -g
->> npm i twitch-api-v5 --save
->> npm i jsdoc -g
+>> npm install
 
-> change 'config.json.sample' file to 'config.json' and fill with your information
+> duplicate ancd change 'config.json.sample' file name to 'config.json' and fill with your information
 
 > run 'npm start' or 'node app.js'
 
@@ -28,6 +27,7 @@ Gonna use the TMI.JS to chat and the TWITCH API throw the twitch-api-v5.
 * [tmi.js](http://www.tmijs.com) - Twitch bot JS solution
 * [twitch-api-v5](https://www.npmjs.com/package/twitch-api-v5) - Twitch API for JS
 * [JSDoc](https://jsdoc.app/) - Documentation for JS Projects
+* [StreamLabs](https://github.com/tnovas/streamlab) - Websocket API to control Streamlabs OBS
 
 ## Documentation 📄
 
@@ -43,5 +43,5 @@ This project is undel license (GPL3) - Read about on the file [LICENSE](LICENSE)
 
 ## Thanks to 🎁
 
-* Capitan **FerreiraTV** who ask me about the possibility to create this solution [FerreiraTV TWITCH Channel](https://www.twitch.tv/ferreiratv)
+* **Capitan FerreiraTV** who ask me about the possibility to create this solution [FerreiraTV TWITCH Channel](https://www.twitch.tv/ferreiratv)
 
