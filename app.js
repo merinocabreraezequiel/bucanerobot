@@ -23,6 +23,7 @@ rawdata = fs.readFileSync('usersregistry.json');
 let UAObj = JSON.parse(rawdata);
 UAObj.forEach(function (element, index,){
 	UsersArray.push(element);
+	console.log('Add to UsersArray: '+element.username);
 });
 
 /* TWITCH API APP CLIEND ID DEFINITION */
