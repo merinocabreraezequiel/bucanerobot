@@ -3,14 +3,12 @@ const tmi = require('tmi.js');
 const fs = require('fs');
 //const StreamlabsApi = require('streamlabs');
 var TwitchAPI = require('twitch-api-v5');
-const activeWin = require('active-win');
-const SockJS = require('sockjs-client'); 
+
+const Slobs = require('./slobs')
+let slob = new Slobs('http://127.0.0.1:59650/api');
 
 let ConfigData = JSON.parse(fs.readFileSync('config.json'));
 const slScenes = JSON.parse(fs.readFileSync('streamlabsScenes.json'));
-
-const sock = new SockJS('http://127.0.0.1:59650/api');
-const pendingTransactions = [];
 
 const ChatUser = {
 	username: "",
@@ -30,8 +28,6 @@ UAObj.forEach(function (element, index,){
 	UsersArray.push(element);
 	console.log('Add to UsersArray: '+element.username);
 });
-
-let currWindow;
 
 /* TWITCH API APP CLIEND ID DEFINITION */
 TwitchAPI.clientID = ConfigData.TwitchAPI.AppClientID;
@@ -149,101 +145,6 @@ client.on("join", (channel, username, self) => {
 	//console.log(cu.username + ' ' + cu.lastJoinDate);
 });
 
-/* SOCKET EVENTS AND ACCTIONS */
-sock.onopen = () => {
-	console.log('===> Connected Successfully to Streamlabs');
-	sock.send(
-		JSON.stringify({
-			"jsonrpc": "2.0",
-			"id": 14,
-			"method": "setVisibility",
-			"params": {
-				"resource": "SceneItem[\"f3f9e305-bbc3-49da-a3b5-4da53a9641df\",\"f99e7692-a597-4f65-a491-c69b0136b780\",\"image_source_9921c812-c93f-40e5-bde5-8f23dea1cd4b\"]",
-				"args": [
-					true
-				]
-			}
-		})
-	);
-};
-sock.onmessage = e => {
-    // Remove pending transaction.
-    if (pendingTransactions.length <= 0) return;
-    var transactionType = pendingTransactions.shift();
-
-    // Parse JSON Data
-	var response = JSON.parse(e.data);
-	console.log('transactionType.sceneName: '+transactionType.sceneName);
-	console.log('sock: '+response.result[0].activeScene);
-	console.log('transactionType.type: '+ transactionType.type);
-    if (transactionType.type === 'sceneRequest') {
-        if (response.result[0].name === undefined) {
-            console.log('Was unable to parse a result.');
-            return;
-        }
-
-//		var foundScene = response.result.find(x => x.name === transactionType.sceneName);
-		console.log('transactionType.sceneName: '+ transactionType.sceneName)
-
-        if (foundScene === undefined) return;
-
- //       console.log(`Transition to Scene: ${transactionType.sceneName}`);
- /*       sock.send(
-            JSON.stringify({
-                jsonrpc: '2.0',
-                id: 1,
-                method: 'makeSceneActive',
-                params: {
-                    resource: 'ScenesService',
-                    args: [foundScene.id]
-                }
-            })
-        );*/
-        return;
-    }
-};
-
-function sendSceneRequest(nameOfScene) {
-    pendingTransactions.push({ type: 'sceneRequest', sceneName: nameOfScene });
-    sock.send(
-        JSON.stringify({
-            jsonrpc: '2.0',
-            id: 1,
-            method: 'getScenes',
-            params: {
-                resource: 'ScenesService'
-            }
-        })
-    );
-}
-
-setInterval(async () => {
-    const res = await activeWin();
-
-    var windowFoundExe = slScenes.data.find(x => {
-        if (res && res.owner.name.toLowerCase().includes(x.windowIncludes.toLowerCase())) return x;
-    });
-
-    var windowFound = slScenes.data.find(x => {
-        if (res && res.title.toLowerCase().includes(x.windowIncludes.toLowerCase())) return x;
-    });
-
-    if (windowFound === undefined && windowFoundExe === undefined) return;
-
-    if (currWindow === res.id) return;
-
-    currWindow = res.id;
-
-    if (windowFound !== undefined) {
-        sendSceneRequest(windowFound.sceneSelect);
-    }
-
-    if (windowFoundExe !== undefined) {
-        sendSceneRequest(windowFoundExe.sceneSelect);
-    }
-}, 500);
-
-
 /* INTERNAL FUNCTIONS */
 /**
  * Format in DD-MM-YYYY current date
@@ -312,3 +213,5 @@ function updateUsersJson(){
 	let data = JSON.stringify(UsersArray, null, 2);
 	fs.writeFileSync('usersregistry.json', data);
 }
+
+//slob.goCommands("SceneItem[\"f3f9e305-bbc3-49da-a3b5-4da53a9641df\",\"f99e7692-a597-4f65-a491-c69b0136b780\",\"image_source_9921c812-c93f-40e5-bde5-8f23dea1cd4b\"]", true);
