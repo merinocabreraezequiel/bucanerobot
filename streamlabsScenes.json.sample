@@ -1,0 +1,20 @@
+{
+    "data": [
+        {
+            "windowIncludes": "alt:V",
+            "sceneSelect": "GTAScene"
+        },
+        {
+            "windowIncludes": "Visual Studio Code",
+            "sceneSelect": "CodeScene"
+        },
+        {
+            "windowIncludes": "Brave",
+            "sceneSelect": "BrowserView"
+        },
+        {
+            "windowIncludes": "Photoshop",
+            "sceneSelect": "TabletScene"
+        }
+    ]
+}
