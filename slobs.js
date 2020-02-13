@@ -1,90 +1,83 @@
 const SockJS = require('sockjs-client'); 
 class slobs {
-    constructor(slobsAPIURL){
+    constructor(slobsAPIURL, workingSource){
+        this.workingSource = workingSource;
         this.sock = new SockJS(slobsAPIURL);
         this.commandSource = "";
         console.log('slobs - constructor');
         
-        this.getCurrentSceneID();
+        this.socketReady();
     }
 
-    getCurrentSceneID(){
+    socketReady(){
         this.sock.onopen = () => {
             console.log('===> Connected Successfully to Streamlabs');
-            this.sock.send(
-                /*JSON.stringify({
-                    "jsonrpc": "2.0",
-                    "id": 1,
-                    "method": "getSources",
-                    "params": {
-                    "resource": "SourcesService",
-                    "args": []
-                    }
-                })*/
-                JSON.stringify({
-                    "jsonrpc": "2.0",
-                    "id": 3,
-                    "method": "activeSceneId",
-                    "params": {
-                        "resource": "ScenesService",
-                        "args": []
-                    }
-                })      
-            );
-        };
-
-        this.sock.onmessage = e => {
-            // Parse JSON Data
-            /*
-                result[0].activeScene
-                result[0].sceneName
-                result[0].name
-             */
-            var response = JSON.parse(e.data, undefined, 2);
-            this.CurrentSceneID = response.result
-            console.log(`slobs - constructor - response: ${response.result}`);
-            var resArrRes = response.result;
-            //resArrRes.forEach(function (element){
-                //var nelem = JSON.parse(element);
-             //   console.log(`slobs - constructor - onmessage - element: ${element}`);
-            //})
-            //console.log('slobs - constructor:'+JSON.stringify(response.result[0]));
+            this.getCurrentSceneID();
         }
     }
 
-    /* SOCKET EVENTS AND ACCTIONS */
-    goCommands(sceneItem, toggle){
-        console.log('slobs - goCommands');
-        
-        this.sock.onopen = () => {
-            console.log('===> Connected Successfully to Streamlabs');
-            this.sock.send(
-                JSON.stringify({
-                    "jsonrpc": "2.0",
-                    "id": 14,
-                    "method": "setVisibility",
-                    "params": {
-                        "resource": sceneItem,
-                        "args": [
-                            toggle
-                        ]
-                    }
-                })
-            );
-        };
+    getCurrentSceneID(){
+        this.sock.send(
+            JSON.stringify({
+               "jsonrpc": "2.0",
+               "id": 1,
+               "method": "activeSceneId",
+               "params": {
+                   "resource": "ScenesService",
+                   "args": []
+                }
+            })      
+        );
+
         this.sock.onmessage = e => {
-            // Parse JSON Data
-            /*
-                result[0].activeScene
-                result[0].sceneName
-                result[0].name
-             */
+            var response = JSON.parse(e.data, undefined, 2);
+            this.CurrentSceneID = response.result;
+            console.log(`slobs - constructor - response: ${response.result}`);
+            this.getCurrentSourceID(this.CurrentSceneID);
+        }
+    }
+
+    getCurrentSourceID(sceneID){
+        console.log('slobs - getCurentsourceID');
+        this.sock.send(
+            JSON.stringify({
+                "jsonrpc": "2.0",
+                "id": 2,
+                "method": "getItems",
+                "params": {
+                    "resource": "Scene[\""+sceneID+"\"]",
+                    "args": []
+                }
+            })      
+        );
+
+        this.sock.onmessage = e => {
+            var response = JSON.parse(e.data, undefined, 2);
+            var sourceData = response.result.find(x => x.name === this.workingSource);
+            this.CurrentSourceID = sourceData.resourceId;
+            console.log(`slobs - getCurrentSourceID - resourceID: ${sourceData.resourceId} with name: ${sourceData.name}`);
+        }
+    }
+
+
+    showCommandos(toggle){
+        console.log(`slobs - showCommandos - toggle ${toggle}`);
+        this.sock.send(
+            JSON.stringify({
+               "jsonrpc": "2.0",
+               "id": 3,
+               "method": "setVisibility",
+               "params": {
+                   "resource": this.CurrentSourceID,
+                   "args": [
+                        toggle
+                    ]
+                }
+            })
+        );
+        this.sock.onmessage = e => {
             var response = JSON.parse(e.data);
             console.log('slobs - onmessage:'+response.result);
-            /*response.result.forEach(function (element){
-                console.log('slobs - element: '+ element);
-            });*/
-            //console.log('slobs - sock: '+response.result[0].activeScene);
         };
     };
 

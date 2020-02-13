@@ -14,5 +14,10 @@
 
 	"Greet":{
 		"daysBeforeIgnore":{number}
+	},
+	"Slob":{
+		"URL": "http://127.0.0.1:59650/api",
+		"CommandosSource": "{string}",
+		"showingTime": {number}
 	}
 }

@@ -5,7 +5,6 @@ const fs = require('fs');
 var TwitchAPI = require('twitch-api-v5');
 
 const Slobs = require('./slobs')
-let slob = new Slobs('http://127.0.0.1:59650/api');
 
 let ConfigData = JSON.parse(fs.readFileSync('config.json'));
 const slScenes = JSON.parse(fs.readFileSync('streamlabsScenes.json'));
@@ -29,8 +28,10 @@ UAObj.forEach(function (element, index,){
 	console.log('Add to UsersArray: '+element.username);
 });
 
+let slob = new Slobs(ConfigData.Slob.url, ConfigData.Slob.commandosSource);
+
 /* TWITCH API APP CLIEND ID DEFINITION */
-TwitchAPI.clientID = ConfigData.TwitchAPI.AppClientID;
+TwitchAPI.clientID = ConfigData.TwitchAPI.appClientID;
 
 /* TMI CREATING CONNECTION */
 const client = new tmi.Client({
@@ -52,7 +53,8 @@ client.connect();
 getChattersTwitchAPI();
 
 setInterval(function(){
-    getChattersTwitchAPI()
+	getChattersTwitchAPI();
+	slob.getCurrentSceneID();
 }, 30000)
 
 /**
@@ -120,6 +122,8 @@ client.on('message', (channel, tags, message, self) => {
 		break;
 		case '!commandos':
 			client.say(channel, `@${tags.username} Ha solicitado los comandos!`);
+			slob.showCommandos(true);
+			setTimeout(function () {slob.showCommandos(false);}, ConfigData.Slob.showingTime);
 		break;
 		default:
 			console.log('no action wit this messaje');
@@ -142,7 +146,6 @@ client.on('message', (channel, tags, message, self) => {
 client.on("join", (channel, username, self) => {
 	if(self) return;
 	checkUserRegister(username, channel);
-	//console.log(cu.username + ' ' + cu.lastJoinDate);
 });
 
 /* INTERNAL FUNCTIONS */
@@ -213,5 +216,3 @@ function updateUsersJson(){
 	let data = JSON.stringify(UsersArray, null, 2);
 	fs.writeFileSync('usersregistry.json', data);
 }
-
-//slob.goCommands("SceneItem[\"f3f9e305-bbc3-49da-a3b5-4da53a9641df\",\"f99e7692-a597-4f65-a491-c69b0136b780\",\"image_source_9921c812-c93f-40e5-bde5-8f23dea1cd4b\"]", true);
