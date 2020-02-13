@@ -139,9 +139,9 @@ client.on('message', (channel, tags, message, self) => {
 /**
  * Action for join event in the chat
  * @event
- * @returns {string} channel - Name of the connected channel
- * @returns {string} username - Name of the user in chat
- * @returns {object} self - it self
+ * @param {string} channel - Name of the connected channel
+ * @param {string} username - Name of the user in chat
+ * @param {object} self - it self
  */
 client.on("join", (channel, username, self) => {
 	if(self) return;
