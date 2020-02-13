@@ -1,11 +1,23 @@
 {
-	"debug":{boolean},
-	"reconnect":{boolean},
-	"secure":{boolean},
-	"username":"bucanerobot",
-	"oauth":"oauth:generatedCode",
-	"channels": [ "#TwitchChannel" ],
-	"channel": "TwitchChannel",
-	"AppClientID":"Twitch_APP_CLIENT_ID",
-	"daysBeforeIgnore":{number}
+	"TMI":{
+		"debug":{boolean},
+		"reconnect":{boolean},
+		"secure":{boolean},
+		"username":"bucanerobot",
+		"oauth":"oauth:generatedCode",
+		"channels": [ "#TwitchChannel" ]
+	},
+	"TwitchAPI":{	
+		"channel": "TwitchChannel",
+		"AppClientID":"Twitch_APP_CLIENT_ID"
+	},
+
+	"Greet":{
+		"daysBeforeIgnore":{number}
+	},
+	"Slob":{
+		"URL": "http://127.0.0.1:59650/api",
+		"CommandosSource": "{string}",
+		"showingTime": {number}
+	}
 }

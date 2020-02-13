@@ -1,10 +1,13 @@
 /* IMPORTING AND NEEDED VARS INITALIZATION*/
 const tmi = require('tmi.js');
 const fs = require('fs');
-var TwitchAPI = require('twitch-api-v5'); 
+//const StreamlabsApi = require('streamlabs');
+var TwitchAPI = require('twitch-api-v5');
 
-let rawdata = fs.readFileSync('config.json');
-let ConfigData = JSON.parse(rawdata);
+const Slobs = require('./slobs')
+
+let ConfigData = JSON.parse(fs.readFileSync('config.json'));
+const slScenes = JSON.parse(fs.readFileSync('streamlabsScenes.json'));
 
 const ChatUser = {
 	username: "",
@@ -19,36 +22,39 @@ const ChatUser = {
 let UsersArray = [];
 let GreetList = [];
 
-rawdata = fs.readFileSync('usersregistry.json');
-let UAObj = JSON.parse(rawdata);
+let UAObj = JSON.parse(fs.readFileSync('usersregistry.json'));
 UAObj.forEach(function (element, index,){
 	UsersArray.push(element);
 	console.log('Add to UsersArray: '+element.username);
 });
 
+let slob = new Slobs(ConfigData.Slob.url, ConfigData.Slob.commandosSource);
+
 /* TWITCH API APP CLIEND ID DEFINITION */
-TwitchAPI.clientID = ConfigData.AppClientID;
+TwitchAPI.clientID = ConfigData.TwitchAPI.appClientID;
 
 /* TMI CREATING CONNECTION */
 const client = new tmi.Client({
-	options: { debug: ConfigData.debug },
+	options: { debug: ConfigData.TMI.debug },
 	connection: {
-		reconnect: ConfigData.reconnect,
-		secure: ConfigData.secure
+		reconnect: ConfigData.TMI.reconnect,
+		secure: ConfigData.TMI.secure
 	},
 	identity: {
-		username: ConfigData.username,
-		password: ConfigData.oauth
+		username: ConfigData.TMI.username,
+		password: ConfigData.TMI.oauth
 	},
-	channels: ConfigData.channels
+	channels: ConfigData.TMI.channels
 });
 client.connect();
+
 
 /* TWITCH API FUNCTIONS */
 getChattersTwitchAPI();
 
 setInterval(function(){
-    getChattersTwitchAPI()
+	getChattersTwitchAPI();
+	slob.getCurrentSceneID();
 }, 30000)
 
 /**
@@ -56,7 +62,7 @@ setInterval(function(){
  * @constructor
  * @param {string} chatChannel name of the Twitch Channel
  */
-function getChattersTwitchAPI(chatChannel=ConfigData.channel){
+function getChattersTwitchAPI(chatChannel=ConfigData.TwitchAPI.channel){
 	TwitchAPI.other.chatters({ channelName: chatChannel }, (err, res) => {
     	if(err) {
    	     console.log(err);
@@ -116,6 +122,8 @@ client.on('message', (channel, tags, message, self) => {
 		break;
 		case '!commandos':
 			client.say(channel, `@${tags.username} Ha solicitado los comandos!`);
+			slob.showCommandos(true);
+			setTimeout(function () {slob.showCommandos(false);}, ConfigData.Slob.showingTime);
 		break;
 		default:
 			console.log('no action wit this messaje');
@@ -138,7 +146,6 @@ client.on('message', (channel, tags, message, self) => {
 client.on("join", (channel, username, self) => {
 	if(self) return;
 	checkUserRegister(username, channel);
-	//console.log(cu.username + ' ' + cu.lastJoinDate);
 });
 
 /* INTERNAL FUNCTIONS */
@@ -189,7 +196,7 @@ function checkUserRegister(username, channel){
 		UsersArray.push(cu);
 	}
 	if (!cu.todayGreeted){
-		if (cu.greetedDays <= ConfigData.daysBeforeIgnore){
+		if (cu.greetedDays <= ConfigData.Greet.daysBeforeIgnore){
 			client.say(channel, `Bienvenido a bordo @${username}`);
 		} else {
 			client.say(channel, `@${username} ya te has pasado por aquí 5 días, date por saludado para siempre`);
