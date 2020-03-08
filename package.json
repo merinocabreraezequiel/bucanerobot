@@ -1,5 +1,5 @@
 {
-  "name": "bucaneroBot",
+  "name": "bucanerobot",
   "description": "Bot for Twitch, greet and overlays",
   "main": "app.js",
   "dependencies": {

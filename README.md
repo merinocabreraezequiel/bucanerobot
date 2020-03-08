@@ -13,10 +13,8 @@ Gonna use the TMI.JS to chat and the TWITCH API throw the twitch-api-v5.
 > Clon repository
 
 > Install dependencies
->> npm i tmi.js --save
->> npm i fs -g
->> npm i twitch-api-v5 --save
->> npm i jsdoc -g
+
+>> ```npm install```
 
 > change 'config.json.sample' file to 'config.json' and fill with your information
 
