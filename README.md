@@ -5,6 +5,8 @@ Gonna use the TMI.JS to chat and the TWITCH API throw the twitch-api-v5.
 ### Pre-requirements 📋
 > nodeJS 12.14.1 LTS [Download](https://nodejs.org/es/download/)
 
+> StreamLabs OBS [Download](https://streamlabs.com/slobs/download)
+
 > oauth Twitch [GET IT](http://twitchapps.com/tmi/)
 
 > Register your App on Twitch [GET APP CLIENT ID](https://dev.twitch.tv/console/apps/)
@@ -24,7 +26,7 @@ Gonna use the TMI.JS to chat and the TWITCH API throw the twitch-api-v5.
 
 * [NodeJS](https://www.nodejs.org) - Works in all OS compatible
 * [tmi.js](http://www.tmijs.com) - Twitch bot JS solution
-* [twitch-api-v5](https://www.npmjs.com/package/twitch-api-v5) - Twitch API for JS
+* [twitch-api-v5](https://github.com/thedist/Twitch_API_v5) - Twitch API for JS
 * [JSDoc](https://jsdoc.app/) - Documentation for JS Projects
 
 ## Documentation 📄

@@ -12,5 +12,27 @@
   "scripts": {
     "start": "node app.js",
     "doc": "jsdoc app.js -d docs"
-  }
+  },
+  "version": "1.0.0",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/merinocabreraezequiel/bucanerobot.git"
+  },
+  "keywords": [
+    "twitch",
+    "chat",
+    "notifications",
+    "overlay",
+    "obs",
+    "streamlabs"
+  ],
+  "author": "Ezequel Merino Cabrera",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/merinocabreraezequiel/bucanerobot/issues"
+  },
+  "homepage": "https://github.com/merinocabreraezequiel/bucanerobot#readme"
 }
