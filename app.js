@@ -73,7 +73,7 @@ function getChattersTwitchAPI(chatChannel=ConfigData.TwitchAPI.channel){
 					GreetList.push(element);
 					checkUserRegister(element, chatChannel);
 				} else {
-					console.log(element+' ya en la lista');
+					console.log(element+' already on the list');
 				}
 				GreetListTemp.push(element);
 				console.log(element+' '+chatChannel);
@@ -83,7 +83,7 @@ function getChattersTwitchAPI(chatChannel=ConfigData.TwitchAPI.channel){
 					GreetList.push(element);
 					checkUserRegister(element, chatChannel);
 				} else {
-					console.log(element+' ya en la lista');
+					console.log(element+' already on the list');
 				}
 				GreetListTemp.push(element);
 				console.log(element+' '+chatChannel);
@@ -93,7 +93,7 @@ function getChattersTwitchAPI(chatChannel=ConfigData.TwitchAPI.channel){
 					GreetList.push(element);
 					checkUserRegister(element, chatChannel);
 				} else {
-					console.log(element+' ya en la lista');
+					console.log(element+' already on the list');
 				}
 				GreetListTemp.push(element);
 				console.log(element+' '+chatChannel);
@@ -126,7 +126,7 @@ client.on('message', (channel, tags, message, self) => {
 			setTimeout(function () {slob.showCommandos(false);}, ConfigData.Slob.showingTime);
 		break;
 		default:
-			console.log('no action wit this messaje');
+			console.log('no action with this messaje');
 	}
 	console.log(tags);
 	console.log(channel);
@@ -145,7 +145,7 @@ client.on('message', (channel, tags, message, self) => {
  */
 client.on("join", (channel, username, self) => {
 	if(self) return;
-	checkUserRegister(username, channel);
+	//checkUserRegister(username, channel);
 });
 
 /* INTERNAL FUNCTIONS */
@@ -199,7 +199,7 @@ function checkUserRegister(username, channel){
 		if (cu.greetedDays <= ConfigData.Greet.daysBeforeIgnore){
 			client.say(channel, `Bienvenido a bordo @${username}`);
 		} else {
-			client.say(channel, `@${username} ya te has pasado por aquí 5 días, date por saludado para siempre`);
+			client.say(channel, `@${username} ya te has pasado por aquí ${ConfigData.Greet.daysBeforeIgnore} días, date por saludado para siempre`);
 		}
 	} else {
 		client.say(channel, `Bienvenido de vuelta @${username} `);
