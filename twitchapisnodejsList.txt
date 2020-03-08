@@ -1,0 +1,3 @@
+https://github.com/Plazide/node-twitch
+https://github.com/impurity-online/twitch-service
+https://github.com/BailleuxThomas/API-RIOT-NODEJS
