@@ -1,10 +1,13 @@
 /* IMPORTING AND NEEDED VARS INITALIZATION*/
 const tmi = require('tmi.js');
 const fs = require('fs');
-var TwitchAPI = require('twitch-api-v5'); 
+//const StreamlabsApi = require('streamlabs');
+var TwitchAPI = require('twitch-api-v5');
 
-let rawdata = fs.readFileSync('config.json');
-let ConnectionData = JSON.parse(rawdata);
+const Slobs = require('./slobs')
+
+let ConfigData = JSON.parse(fs.readFileSync('config.json'));
+const slScenes = JSON.parse(fs.readFileSync('streamlabsScenes.json'));
 
 const ChatUser = {
 	username: "",
@@ -19,30 +22,39 @@ const ChatUser = {
 let UsersArray = [];
 let GreetList = [];
 
+let UAObj = JSON.parse(fs.readFileSync('usersregistry.json'));
+UAObj.forEach(function (element, index,){
+	UsersArray.push(element);
+	console.log('Add to UsersArray: '+element.username);
+});
+
+let slob = new Slobs(ConfigData.Slob.url, ConfigData.Slob.commandosSource);
 
 /* TWITCH API APP CLIEND ID DEFINITION */
-TwitchAPI.clientID = ConnectionData.AppClientID;
+TwitchAPI.clientID = ConfigData.TwitchAPI.appClientID;
 
 /* TMI CREATING CONNECTION */
 const client = new tmi.Client({
-	options: { debug: ConnectionData.debug },
+	options: { debug: ConfigData.TMI.debug },
 	connection: {
-		reconnect: ConnectionData.reconnect,
-		secure: ConnectionData.secure
+		reconnect: ConfigData.TMI.reconnect,
+		secure: ConfigData.TMI.secure
 	},
 	identity: {
-		username: ConnectionData.username,
-		password: ConnectionData.oauth
+		username: ConfigData.TMI.username,
+		password: ConfigData.TMI.oauth
 	},
-	channels: ConnectionData.channels
+	channels: ConfigData.TMI.channels
 });
 client.connect();
+
 
 /* TWITCH API FUNCTIONS */
 getChattersTwitchAPI();
 
 setInterval(function(){
-    getChattersTwitchAPI()
+	getChattersTwitchAPI();
+	slob.getCurrentSceneID();
 }, 30000)
 
 /**
@@ -50,13 +62,33 @@ setInterval(function(){
  * @constructor
  * @param {string} chatChannel name of the Twitch Channel
  */
-function getChattersTwitchAPI(chatChannel=ConnectionData.channel){
+function getChattersTwitchAPI(chatChannel=ConfigData.TwitchAPI.channel){
 	TwitchAPI.other.chatters({ channelName: chatChannel }, (err, res) => {
     	if(err) {
    	     console.log(err);
     	} else {
 			let GreetListTemp = [];
 			res.chatters.viewers.forEach(function (element, index,){
+				if (!GreetList.includes(element)){
+					GreetList.push(element);
+					checkUserRegister(element, chatChannel);
+				} else {
+					console.log(element+' ya en la lista');
+				}
+				GreetListTemp.push(element);
+				console.log(element+' '+chatChannel);
+			});
+			res.chatters.vips.forEach(function (element, index,){
+				if (!GreetList.includes(element)){
+					GreetList.push(element);
+					checkUserRegister(element, chatChannel);
+				} else {
+					console.log(element+' ya en la lista');
+				}
+				GreetListTemp.push(element);
+				console.log(element+' '+chatChannel);
+			});
+			res.chatters.moderators.forEach(function (element, index,){
 				if (!GreetList.includes(element)){
 					GreetList.push(element);
 					checkUserRegister(element, chatChannel);
@@ -90,6 +122,8 @@ client.on('message', (channel, tags, message, self) => {
 		break;
 		case '!commandos':
 			client.say(channel, `@${tags.username} Ha solicitado los comandos!`);
+			slob.showCommandos(true);
+			setTimeout(function () {slob.showCommandos(false);}, ConfigData.Slob.showingTime);
 		break;
 		default:
 			console.log('no action wit this messaje');
@@ -105,14 +139,13 @@ client.on('message', (channel, tags, message, self) => {
 /**
  * Action for join event in the chat
  * @event
- * @returns {string} channel - Name of the connected channel
- * @returns {string} username - Name of the user in chat
- * @returns {object} self - it self
+ * @param {string} channel - Name of the connected channel
+ * @param {string} username - Name of the user in chat
+ * @param {object} self - it self
  */
 client.on("join", (channel, username, self) => {
 	if(self) return;
 	checkUserRegister(username, channel);
-	//console.log(cu.username + ' ' + cu.lastJoinDate);
 });
 
 /* INTERNAL FUNCTIONS */
@@ -160,20 +193,26 @@ function checkUserRegister(username, channel){
 		cu.lastJoinDate =  currentDateFormated();
 		cu.greetedDays = 1;
 		cu.todayGreeted = false;
-		let jsonvar = {
-			username : cu.username,
-			lastJoinDate : cu.lastJoinDate,
-			greetedDays : 1,
-			todayGreeted : false
-		}	
-		let data = JSON.stringify(jsonvar, null, 2);
-		fs.appendFileSync('usersregistry.json', data);
 		UsersArray.push(cu);
 	}
 	if (!cu.todayGreeted){
-		client.say(channel, `Bienvenido a bordo @${username}`);
+		if (cu.greetedDays <= ConfigData.Greet.daysBeforeIgnore){
+			client.say(channel, `Bienvenido a bordo @${username}`);
+		} else {
+			client.say(channel, `@${username} ya te has pasado por aquí 5 días, date por saludado para siempre`);
+		}
 	} else {
 		client.say(channel, `Bienvenido de vuelta @${username} `);
 	}
+	updateUsersJson();
 	console.log(username + ' has joined to ' + channel);
+}
+
+/**
+ * Save Array to json file with users statistics
+ * @function
+ */
+function updateUsersJson(){
+	let data = JSON.stringify(UsersArray, null, 2);
+	fs.writeFileSync('usersregistry.json', data);
 }
