@@ -7,7 +7,6 @@ var TwitchAPI = require('twitch-api-v5');
 const Slobs = require('./slobs')
 
 let ConfigData = JSON.parse(fs.readFileSync('config.json'));
-const slScenes = JSON.parse(fs.readFileSync('streamlabsScenes.json'));
 
 const ChatUser = {
 	username: "",
@@ -29,6 +28,11 @@ UAObj.forEach(function (element, index,){
 });
 
 let slob = new Slobs(ConfigData.Slob.url, ConfigData.Slob.commandosSource);
+
+const enable_functions = {
+	greet: ConfigData.Modules.greet,
+	commandos: ConfigData.Modules.slobs
+}
 
 /* TWITCH API APP CLIEND ID DEFINITION */
 TwitchAPI.clientID = ConfigData.TwitchAPI.appClientID;
@@ -121,9 +125,13 @@ client.on('message', (channel, tags, message, self) => {
 			client.say(channel, `@${tags.username}, heya!`);
 		break;
 		case '!commandos':
-			client.say(channel, `@${tags.username} Ha solicitado los comandos!`);
-			slob.showCommandos(true);
-			setTimeout(function () {slob.showCommandos(false);}, ConfigData.Slob.showingTime);
+			if (enable_functions.commandos){
+				client.say(channel, `@${tags.username} Ha solicitado los comandos!`);
+				slob.showCommandos(true);
+				setTimeout(function () {slob.showCommandos(false);}, ConfigData.Slob.showingTime);
+			} else {
+				client.say(channel, `Lo siento @${tags.username} no me dejan mostrarte el listado`);
+			}
 		break;
 		default:
 			console.log('no action with this messaje');
@@ -195,14 +203,16 @@ function checkUserRegister(username, channel){
 		cu.todayGreeted = false;
 		UsersArray.push(cu);
 	}
-	if (!cu.todayGreeted){
-		if (cu.greetedDays <= ConfigData.Greet.daysBeforeIgnore){
-			client.say(channel, `Bienvenido a bordo @${username}`);
+	if (enable_functions.greet){
+		if (!cu.todayGreeted){
+			if (cu.greetedDays <= ConfigData.Greet.daysBeforeIgnore){
+				client.say(channel, `Bienvenido a bordo @${username}`);
+			} else {
+				client.say(channel, `@${username} ya te has pasado por aquí ${ConfigData.Greet.daysBeforeIgnore} días, date por saludado para siempre`);
+			}
 		} else {
-			client.say(channel, `@${username} ya te has pasado por aquí ${ConfigData.Greet.daysBeforeIgnore} días, date por saludado para siempre`);
+			client.say(channel, `Bienvenido de vuelta @${username} `);
 		}
-	} else {
-		client.say(channel, `Bienvenido de vuelta @${username} `);
 	}
 	updateUsersJson();
 	console.log(username + ' has joined to ' + channel);
