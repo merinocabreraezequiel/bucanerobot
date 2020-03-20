@@ -3,8 +3,8 @@
   "description": "Bot for Twitch, greet and overlays",
   "main": "app.js",
   "dependencies": {
-    "active-win": "^6.0.0",
     "jsdoc": "^3.6.3",
+    "minimist": "^1.2.5",
     "sockjs-client": "^1.4.0",
     "tmi.js": "^1.5.0",
     "twitch-api-v5": "^2.0.4"
