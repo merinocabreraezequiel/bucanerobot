@@ -3,3 +3,6 @@ oauth.md
 *.json
 !package.json
 !package-lock.json
+github
+github.pub
+*.csv
