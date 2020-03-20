@@ -1,4 +1,6 @@
 const SockJS = require('sockjs-client'); 
+const events = require('events');
+
 /**
  * Class for control the Streamlabs OBS scenes in local mode
  * @class
@@ -11,10 +13,14 @@ class slobs {
      * @param {string} workingSource - name of the controled item on the scene
      */
     constructor(slobsAPIURL, workingSource){
+        this.eventEmitter = new events.EventEmitter();
+        this.eventEmitter.on('LOG', (data)=> console.log(`SLOBS LOG: ${data}`));
+
         this.workingSource = workingSource;
         this.sock = new SockJS(slobsAPIURL);
         this.commandSource = "";
-        console.log('slobs - constructor');
+        
+        this.eventEmitter.emit('LOG', 'slobs - constructor');
         
         this.socketReady();
     }
@@ -24,7 +30,7 @@ class slobs {
  */
     socketReady(){
         this.sock.onopen = () => {
-            console.log('===> Connected Successfully to Streamlabs');
+            this.eventEmitter.emit('LOG', '===> Connected Successfully to Streamlabs');
             this.getCurrentSceneID();
         }
     }
@@ -50,7 +56,7 @@ class slobs {
         this.sock.onmessage = e => {
             var response = JSON.parse(e.data, undefined, 2);
             this.CurrentSceneID = response.result;
-            console.log(`slobs - constructor - response: ${response.result}`);
+            this.eventEmitter.emit('LOG', `slobs - constructor - response: ${response.result}`);
             this.getCurrentSourceID(this.CurrentSceneID);
         }
     }
@@ -78,7 +84,8 @@ class slobs {
             var response = JSON.parse(e.data, undefined, 2);
             var sourceData = response.result.find(x => x.name === this.workingSource);
             this.CurrentSourceID = sourceData.resourceId;
-            console.log(`slobs - getCurrentSourceID - resourceID: ${sourceData.resourceId} with name: ${sourceData.name}`);
+            
+            this.eventEmitter.emit('LOG', `slobs - getCurrentSourceID - resourceID: ${sourceData.resourceId} with name: ${sourceData.name}`);
         }
     }
 
@@ -103,7 +110,7 @@ class slobs {
         );
         this.sock.onmessage = e => {
             var response = JSON.parse(e.data);
-            console.log('slobs - onmessage:'+response.result);
+            this.eventEmitter.emit('LOG', 'slobs - onmessage:'+response.result);
         };
     };
 }

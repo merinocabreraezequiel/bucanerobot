@@ -28,11 +28,19 @@ UAObj.forEach(function (element, index,){
 });
 
 let slob = new Slobs(ConfigData.Slob.url, ConfigData.Slob.commandosSource);
+slob.addListener('LOG', (data) => {
+	if(self) return;
+	console.log('slobs event LOG: '+data);
+
+} );
 
 const enable_functions = {
-	greet: ConfigData.Modules.greet,
-	commandos: ConfigData.Modules.slobs
+	greet: ConfigData.Acctions.greet,
+	commandos: ConfigData.Acctions.commandos
 }
+
+console.log('enable_functions.greet: '+enable_functions.greet);
+console.log('enable_functions.commandos: '+enable_functions.commandos);
 
 /* TWITCH API APP CLIEND ID DEFINITION */
 TwitchAPI.clientID = ConfigData.TwitchAPI.appClientID;

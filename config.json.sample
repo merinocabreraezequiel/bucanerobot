@@ -1,5 +1,5 @@
 {
-	"Modules":{
+	"Acctions":{
 		"greet":true,
 		"commandos":true
 	},
