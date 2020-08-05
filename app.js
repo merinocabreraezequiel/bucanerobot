@@ -115,7 +115,15 @@ function getChattersTwitchAPI(chatChannel=ConfigData.TwitchAPI.channel){
 			console.log(res);
     	}
 	});
-}
+};
+
+TwitchAPI.users.checkSub({ auth = 'OAuth:1q3yxwbujlmndf0e108yoqivdfmxef', userID = '61345232', channelID = '61345232' }, (err, res) => {
+    if(err) {
+        console.log(err);
+    } else {
+        console.log(res);	
+    }
+});
 
 /* TMI ON EVENTS */
 /**

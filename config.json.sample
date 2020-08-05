@@ -1,7 +1,13 @@
 {
+<<<<<<< HEAD
 	"Acctions":{
 		"greet":true,
 		"commandos":true
+=======
+	"modules":{
+		"Greet":{boolean},
+		"slobs":{boolean}
+>>>>>>> 3752dd6c05be7a45da9bd233ff0441217e7e648e
 	},
 	"TMI":{
 		"debug":{boolean},
