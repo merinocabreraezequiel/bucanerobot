@@ -1,4 +1,8 @@
 {
+	"modules":{
+		"Greet":{boolean},
+		"slobs":{boolean}
+	},
 	"TMI":{
 		"debug":{boolean},
 		"reconnect":{boolean},
