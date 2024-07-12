@@ -4,7 +4,7 @@
   "main": "app.js",
   "dependencies": {
     "active-win": "^6.0.0",
-    "jsdoc": "^3.6.3",
+    "jsdoc": "^3.6.11",
     "minimist": "^1.2.6",
     "sockjs-client": "^1.4.0",
     "tmi.js": "^1.8.5",
